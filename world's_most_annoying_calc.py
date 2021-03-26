@@ -1,40 +1,50 @@
-# World's Most Annoying Calculator Function
+# Annoying Calculator
 
 import random, time
-from pyinputplus import *
+import pyinputplus as pyip
 
 def countdown(t):
-    '''This function is a countdown timer. Arguments passed into the function must be an integer representing seconds.'''
+    '''
+    Countdown timer. Arguments passed into the function must be an integer representing seconds.
+    '''
 
     while t:
+        # divmod() displays the quotient and remainder after dividing its arguments.
         mins, secs = divmod(t, 60)
+        # Because t is an input string, it must be converted to int using string formatting like below. 
+        # (0=leading zero, 2=min width, d=integer)
         timer = '{:02d}:{:02d}'.format(mins, secs)
+        # end="\r" = carriage return - following line overwrites the previous line.
         print(timer, end="\r")
         time.sleep(1)
+        # Decrement time until reaching 0.
         t -= 1
 
 def mult_quiz():
-    '''This function is a multiplication quiz generator. The user is given three attempts and five seconds to solve each problem.'''
+    '''
+    Multiplication quiz generator. The user is given three attempts and five seconds to solve each problem.
+    '''
 
-    question_index = 10
+    total_problems = 10
     correct_answers = 0
 
-    for question_number in range(question_index):
+    for problem in range(total_problems):
         # Pick two random numbers.
         num1 = random.randint(0,9)
         num2 = random.randint(0,9)
-        prompt = f'{question_number + 1}: {num1} x {num2} = '
+        prompt = f'{problem + 1}: {num1} x {num2} = '
 
         try:
-            # The ^ and % characters in allowRegexes ensure that the answer begins and ends with the correct number.
+            # The first arg in inputStr prints a prompt. The second arg contains a condition.
+            # The ^ and $ characters in allowRegexes ensure that the answer begins and ends with the correct number.
             # The first argument in blockRegexes prevents every other possible string that doesn't match the correct answer.
-            # The second argument prompts 'Incorrect!' and restarts the question.
-            inputStr(prompt, allowRegexes=[f'^{num1 * num2}$'], blockRegexes=[('.*', 'Incorrect!')], timeout=5, limit=3)
+            # The second argument prints 'Incorrect!' and restarts the question.
+            pyip.inputStr(prompt, allowRegexes=[f'^{num1 * num2}$'], blockRegexes=[('.*', 'Incorrect!')], timeout=5, limit=3)
         # If the user answers after the 5 sec timeout has expired, a TimeoutException is raised.
-        except TimeoutException:
+        except pyip.TimeoutException:
             print('Out of time!')
         # If the user answers incorrectly more than 3 times, a RetryLimitException is raised.
-        except RetryLimitException:
+        except pyip.RetryLimitException:
             print('Out of tries!')
         else:
             print('Correct')
@@ -42,12 +52,14 @@ def mult_quiz():
 
     print('\nCalculating score...')
     time.sleep(1.5)
-    print(f'\nScore: {correct_answers} / {question_index}')
+    print(f'\nScore: {correct_answers} / {total_problems}')
     time.sleep(1.5)
     print('Nice.')
 
 def rock_paper_scissor():
-    '''This function is a rock, paper, scissor game. Wins, losses, and ties are recorded and displayed at every turn.'''
+    '''
+    Rock, paper, scissor game. Wins, losses, and ties are recorded and displayed after each turn.
+    '''
 
     # These variables keep track of the number of wins, losses, and ties.
     wins = 0
@@ -116,7 +128,7 @@ def rock_paper_scissor():
             break
 
 # Main function.
-def pain(problems):
+def calculate(problems):
     '''
     This function solves simple arithmetic problems and returns the results in a vertically aligned format.
     However, the function comes with several annoying conditions:
@@ -124,14 +136,14 @@ def pain(problems):
     - once the user guesses the correct number, the user must solve a series of multiplication problems
     - once the user solves the problems, the user must defeat the computer in a game of rock, paper, scissors
     - once the user wins the game, the answers to the arithmetic problems will be revealed
-    - operations must be formated as strings within an array
+    - operations must be formated as strings inside an array
     - operands are limited to 4 digits
-    - the function can solve up to 5 problems at a time
+    - the function can only solve up to 5 problems at a time
     '''
 
     # Number guessing game.
-    condition = False
-    while condition == False:
+    win = False
+    while win == False:
         secret_number = random.randint(1, 10)
         print("In order to reveal the answer, you must pass the number guessing game. Let's begin!")
         print('I am thinking of a number between 1 and 10.')
@@ -149,7 +161,7 @@ def pain(problems):
 
         if guess == secret_number:
             print('\nGood job! You guessed my number in ' + str(i) + ' guesses!')
-            condition == True
+            win == True
             break
         else:
             print('Nope. The number I was thinking of was ' + str(secret_number) + '.')
@@ -187,7 +199,7 @@ def pain(problems):
         rock_paper_scissor()
 
     # Evaluation and formatting.
-    # Empty strings will be updated within the for loop for final formatting.
+    # Empty strings will be updated for final formatting.
     top = ''
     bottom = ''
     divider = ''
@@ -226,7 +238,7 @@ def pain(problems):
         else:
             evaluation = str(float(operand_left) / float(operand_right)).rstrip('0').rstrip('.')
 
-        # Right-align both operands with the operator on the same line as the second operand.
+        # Right-align operands and place the operator on the same line as the second operand.
         top_length = len(operand_left) + len(operand_right) + len(operator)
         bottom_length = len(operand_left) + len(operand_right)
         top_align = operand_left.rjust(top_length)
@@ -252,6 +264,7 @@ def pain(problems):
     return top + '\n' + bottom + '\n' + divider + '\n' + operation_eval
 
 
-print(pain(['122 x 2', '1.2 + 2', '2.2 * 2']))
+# Example
+print(calculate(['122 x 2', '1.2 + 2', '2.2 * 2', '5 / 2']))
 
 
