@@ -29,4 +29,4 @@ $ pip install pyinputplus
 ```
 
 ## Running
-To make a calculation, pass a list of operations in string format inside the calculate() function. Print the to the console.
+To make a calculation, pass a list of operations in string format inside the calculate() function. Print to the console.
