@@ -28,5 +28,9 @@ This project utilizes the [PyInputPlus](https://pypi.org/project/PyInputPlus/) m
 $ pip install pyinputplus
 ```
 
-## Running
+## Usage
 To make a calculation, pass a list of operations in string format inside the calculate() function. Print to the console.
+
+```
+calculate(['122 x 2', '1.2 + 2', '2.2 * 2', '5 / 2'])
+```
